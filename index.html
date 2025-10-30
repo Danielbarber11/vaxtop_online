@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>vaxtop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'primary': '#0A2540',    // כחול כהה
+              'secondary': '#F2F4F8',  // אפור בהיר
+              'accent': '#00BFFF',      // תכלת חשמלי
+            },
+          },
+        },
+      }
+    </script>
+    <style>
+      body {
+        overscroll-behavior: none;
+      }
+      .snap-y-mandatory {
+        scroll-snap-type: y mandatory;
+      }
+      .snap-start {
+        scroll-snap-align: start;
+      }
+      .snap-stop-always {
+        scroll-snap-stop: always;
+      }
+      .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      @keyframes sparkle {
+        0% { transform: translateX(-100%) scaleX(0.1); opacity: 0; }
+        50% { opacity: 1; }
+        100% { transform: translateX(100%) scaleX(2); opacity: 0; }
+      }
+
+      .progress-bar-sparkle {
+        position: relative;
+        overflow: hidden;
+        transition: width 0.1s linear;
+      }
+
+      .progress-bar-sparkle::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+        animation: sparkle 1.5s infinite linear;
+      }
+      
+      .icon-shadow {
+        filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.6));
+      }
+
+      /* Accessibility Styles */
+      :root[data-high-contrast="true"] .bg-primary { background-color: #000 !important; }
+      :root[data-high-contrast="true"] .text-secondary { color: #fff !important; }
+      :root[data-high-contrast="true"] .bg-accent { background-color: #00ffff !important; }
+      :root[data-high-contrast="true"] .text-accent { color: #00ffff !important; }
+      :root[data-high-contrast="true"] .text-primary { color: #000 !important; }
+      :root[data-high-contrast="true"] .border-gray-700 { border-color: #fff !important; }
+      :root[data-high-contrast="true"] .bg-gray-800 { background-color: #222 !important; }
+      :root[data-high-contrast="true"] .bg-gray-900 { background-color: #111 !important; }
+      :root[data-high-contrast="true"] .bg-gray-700 { background-color: #444 !important; }
+      :root[data-high-contrast="true"] .text-gray-400 { color: #ccc !important; }
+      :root[data-high-contrast="true"] .bg-gray-600 { background-color: #666 !important; }
+      :root[data-high-contrast="true"] button, :root[data-high-contrast="true"] a { border: 1px solid transparent; }
+      :root[data-high-contrast="true"] button:focus, :root[data-high-contrast="true"] a:focus { border-color: #00ffff; }
+
+
+      :root[data-large-text="true"] body { font-size: 1.15rem; }
+      :root[data-large-text="true"] .text-xs { font-size: 0.9rem !important; }
+      :root[data-large-text="true"] .text-sm { font-size: 1rem !important; }
+      :root[data-large-text="true"] .text-lg { font-size: 1.3rem !important; }
+      :root[data-large-text="true"] .text-xl { font-size: 1.5rem !important; }
+      :root[data-large-text="true"] .text-2xl { font-size: 1.8rem !important; }
+      :root[data-large-text="true"] .text-3xl { font-size: 2.2rem !important; }
+      :root[data-large-text="true"] .text-4xl { font-size: 2.8rem !important; }
+
+      :root[data-reduce-motion="true"] * {
+          animation: none !important;
+          transition: none !important;
+          scroll-behavior: auto !important;
+      }
+      
+      :root[data-text-spacing="true"] p, 
+      :root[data-text-spacing="true"] span,
+      :root[data-text-spacing="true"] div:not(:has(> svg)), /* Avoid affecting icon containers */
+      :root[data-text-spacing="true"] label,
+      :root[data-text-spacing="true"] button,
+      :root[data-text-spacing="true"] input,
+      :root[data-text-spacing="true"] textarea,
+      :root[data-text-spacing="true"] h1,
+      :root[data-text-spacing="true"] h2,
+      :root[data-text-spacing="true"] h3 {
+          letter-spacing: 0.05em !important;
+          line-height: 1.6 !important;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.27.0"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
