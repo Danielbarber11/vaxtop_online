@@ -10,6 +10,3 @@
     "VITE_ENABLE_GOOGLE_AUTH": "true",
     "VITE_ENABLE_DATA_PERSISTENCE": "true"
   }
-}
-
-// Vercel deployment configuration for vaxtop_online project
