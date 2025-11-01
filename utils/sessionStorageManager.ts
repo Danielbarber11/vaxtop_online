@@ -1,24 +1,15 @@
-// Session Storage Manager - Multi-device login support
-// מנהל סשן מרובה מכשירים עם토ken בטוח
+// Session Storage Manager - Multi-device login (PERMANENT)
+// מנהל סשן מרובה מכשירים - התחברות נצחית עד למחיקה
 
 interface DeviceSession {
   deviceId: string;
   userId: string;
   token: string;
-  sessionToken: string; // Unique token for this device session
+  sessionToken: string;
   email: string;
   createdAt: string;
   lastActivity: string;
-  expiresAt: string;
   isActive: boolean;
-}
-
-interface AuthToken {
-  userId: string;
-  email: string;
-  sessionToken: string;
-  createdAt: string;
-  expiresAt: string;
 }
 
 const SESSION_STORAGE_KEYS = {
@@ -43,32 +34,31 @@ const generateSessionToken = (): string => {
 };
 
 export const sessionStorageManager = {
-  // Create new device session
-  createSession: (userId: string, email: string, expiresInDays: number = 30): DeviceSession => {
+  // Create new permanent device session (NO expiration)
+  createSession: (userId: string, email: string): DeviceSession => {
     try {
       const deviceId = generateDeviceId();
       const sessionToken = generateSessionToken();
       const now = new Date();
-      const expiresAt = new Date(now.getTime() + expiresInDays * 24 * 60 * 60 * 1000);
 
       const session: DeviceSession = {
         deviceId,
         userId,
-        token: btoa(`${userId}:${sessionToken}`), // Basic encoding (not cryptographic)
+        token: btoa(`${userId}:${sessionToken}`),
         sessionToken,
         email,
         createdAt: now.toISOString(),
         lastActivity: now.toISOString(),
-        expiresAt: expiresAt.toISOString(),
         isActive: true,
       };
 
-      // Save current session
+      // Save permanent session
       localStorage.setItem(SESSION_STORAGE_KEYS.CURRENT_SESSION, JSON.stringify(session));
       
       // Add to sessions list
       sessionStorageManager.addToSessionsList(session);
       
+      console.log(`✅ Permanent session created on device: ${session.deviceId}`);
       return session;
     } catch (error) {
       console.error('Error creating session:', error);
@@ -76,28 +66,21 @@ export const sessionStorageManager = {
     }
   },
 
-  // Get current session
+  // Get current session (permanent)
   getCurrentSession: (): DeviceSession | null => {
     try {
       const sessionStr = localStorage.getItem(SESSION_STORAGE_KEYS.CURRENT_SESSION);
       if (!sessionStr) return null;
       
       const session: DeviceSession = JSON.parse(sessionStr);
-      
-      // Check if session is expired
-      if (new Date(session.expiresAt) < new Date()) {
-        sessionStorageManager.clearSession();
-        return null;
-      }
-      
-      return session;
+      return session.isActive ? session : null;
     } catch (error) {
       console.error('Error getting current session:', error);
       return null;
     }
   },
 
-  // Update last activity
+  // Update last activity timestamp
   updateLastActivity: (): boolean => {
     try {
       const session = sessionStorageManager.getCurrentSession();
@@ -121,22 +104,21 @@ export const sessionStorageManager = {
     }
   },
 
-  // Add session to list
+  // Add session to list (keep all sessions)
   addToSessionsList: (session: DeviceSession): void => {
     try {
       const sessions = sessionStorageManager.getSessionsList();
       // Remove old session from same device if exists
       const filtered = sessions.filter(s => s.deviceId !== session.deviceId);
       filtered.push(session);
-      // Keep only last 10 sessions
-      const limited = filtered.slice(-10);
-      localStorage.setItem(SESSION_STORAGE_KEYS.SESSIONS_LIST, JSON.stringify(limited));
+      // No limit - keep all sessions
+      localStorage.setItem(SESSION_STORAGE_KEYS.SESSIONS_LIST, JSON.stringify(filtered));
     } catch (error) {
       console.error('Error adding to sessions list:', error);
     }
   },
 
-  // Get all sessions for this user
+  // Get all sessions (permanent)
   getSessionsList: (): DeviceSession[] => {
     try {
       const sessionsStr = localStorage.getItem(SESSION_STORAGE_KEYS.SESSIONS_LIST);
@@ -147,10 +129,15 @@ export const sessionStorageManager = {
     }
   },
 
-  // Clear current session (logout)
+  // Delete only current device session
   clearSession: (): boolean => {
     try {
-      localStorage.removeItem(SESSION_STORAGE_KEYS.CURRENT_SESSION);
+      const session = sessionStorageManager.getCurrentSession();
+      if (session) {
+        session.isActive = false;
+        localStorage.setItem(SESSION_STORAGE_KEYS.CURRENT_SESSION, JSON.stringify(session));
+      }
+      console.log('✅ Session deleted from this device only');
       return true;
     } catch (error) {
       console.error('Error clearing session:', error);
@@ -158,14 +145,15 @@ export const sessionStorageManager = {
     }
   },
 
-  // Clear all sessions (logout from all devices)
-  clearAllSessions: (): boolean => {
+  // Delete all sessions and device ID (factory reset)
+  deleteAllSessions: (): boolean => {
     try {
       localStorage.removeItem(SESSION_STORAGE_KEYS.CURRENT_SESSION);
       localStorage.removeItem(SESSION_STORAGE_KEYS.SESSIONS_LIST);
+      console.log('⚠️ All sessions deleted - FACTORY RESET');
       return true;
     } catch (error) {
-      console.error('Error clearing all sessions:', error);
+      console.error('Error deleting all sessions:', error);
       return false;
     }
   },
@@ -174,8 +162,7 @@ export const sessionStorageManager = {
   verifySessionToken: (token: string): boolean => {
     try {
       const session = sessionStorageManager.getCurrentSession();
-      if (!session) return false;
-      return session.token === token && session.isActive;
+      return session !== null && session.token === token && session.isActive;
     } catch (error) {
       console.error('Error verifying session token:', error);
       return false;
@@ -185,6 +172,23 @@ export const sessionStorageManager = {
   // Get device ID
   getDeviceId: (): string => {
     return generateDeviceId();
+  },
+
+  // Get user ID from session
+  getUserId: (): string | null => {
+    const session = sessionStorageManager.getCurrentSession();
+    return session ? session.userId : null;
+  },
+
+  // Get device sessions for user (can login from multiple devices)
+  getUserDevices: (userId: string): DeviceSession[] => {
+    try {
+      const sessions = sessionStorageManager.getSessionsList();
+      return sessions.filter(s => s.userId === userId && s.isActive);
+    } catch (error) {
+      console.error('Error getting user devices:', error);
+      return [];
+    }
   },
 };
 
