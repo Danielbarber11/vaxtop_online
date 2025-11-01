@@ -13,13 +13,12 @@ export default function AuthScreen() {
   const [loading, setLoading] = useState(false);
   const { signIn, signUp } = useAuth();
 
-  const handleGoogleLogin = () => {
+  const handleGoogleLogin = async () => {
     setLoading(true);
     setError('');
     try {
-      // הדמיה של התחברות דרך Google
       const testUser = MOCK_USERS[0];
-      signIn(testUser.email, testUser.password);
+      await signIn(testUser.email, testUser.password);
     } catch (err) {
       setError('שגיאה בהתחברות דרך Google');
     } finally {
@@ -27,13 +26,12 @@ export default function AuthScreen() {
     }
   };
 
-  const handleAppleLogin = () => {
+  const handleAppleLogin = async () => {
     setLoading(true);
     setError('');
     try {
-      // הדמיה של התחברות דרך Apple
       const testUser = MOCK_USERS[1];
-      signIn(testUser.email, testUser.password);
+      await signIn(testUser.email, testUser.password);
     } catch (err) {
       setError('שגיאה בהתחברות דרך Apple');
     } finally {
@@ -41,13 +39,12 @@ export default function AuthScreen() {
     }
   };
 
-  const handleMicrosoftLogin = () => {
+  const handleMicrosoftLogin = async () => {
     setLoading(true);
     setError('');
     try {
-      // הדמיה של התחברות דרך Microsoft
       const testUser = MOCK_USERS[2];
-      signIn(testUser.email, testUser.password);
+      await signIn(testUser.email, testUser.password);
     } catch (err) {
       setError('שגיאה בהתחברות דרך Microsoft');
     } finally {
@@ -55,12 +52,12 @@ export default function AuthScreen() {
     }
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
     try {
-      signIn(email, password);
+      await signIn(email, password);
     } catch (err) {
       setError('שגיאה בהתחברות');
     } finally {
@@ -68,12 +65,12 @@ export default function AuthScreen() {
     }
   };
 
-  const handleSignUp = (e: React.FormEvent) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
     try {
-      signUp(email, password, name);
+      await signUp(email, password, name);
     } catch (err) {
       setError('שגיאה בהרשמה');
     } finally {
@@ -84,7 +81,6 @@ export default function AuthScreen() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Welcome Screen */}
         {mode === 'welcome' && (
           <div className="bg-gray-800 rounded-lg p-8 shadow-2xl space-y-6">
             <div className="text-center space-y-2">
@@ -92,11 +88,9 @@ export default function AuthScreen() {
               <p className="text-gray-400">ברוכים הבאים לפלטפורמה</p>
             </div>
 
-            {error && <div className="bg-red-500/20 border border-red-500 rounded p-3 text-red-300">{error}</div>}
+            {error && <div className="bg-red-500/20 border border-red-500 rounded p-3 text-red-300 text-sm">{error}</div>}
 
-            {/* OAuth Buttons */}
             <div className="space-y-3">
-              {/* Google Button */}
               <button
                 onClick={handleGoogleLogin}
                 disabled={loading}
@@ -106,7 +100,6 @@ export default function AuthScreen() {
                 התחברות דרך Google
               </button>
 
-              {/* Apple Button */}
               <button
                 onClick={handleAppleLogin}
                 disabled={loading}
@@ -116,7 +109,6 @@ export default function AuthScreen() {
                 התחברות דרך Apple
               </button>
 
-              {/* Microsoft Button */}
               <button
                 onClick={handleMicrosoftLogin}
                 disabled={loading}
@@ -136,7 +128,6 @@ export default function AuthScreen() {
               </div>
             </div>
 
-            {/* Traditional Auth Buttons */}
             <div className="space-y-2">
               <button
                 onClick={() => setMode('login')}
@@ -154,12 +145,10 @@ export default function AuthScreen() {
           </div>
         )}
 
-        {/* Login Screen */}
         {mode === 'login' && (
           <div className="bg-gray-800 rounded-lg p-8 shadow-2xl space-y-4">
             <h2 className="text-2xl font-bold text-white text-center">התחברות</h2>
-            {error && <div className="bg-red-500/20 border border-red-500 rounded p-3 text-red-300">{error}</div>}
-            
+            {error && <div className="bg-red-500/20 border border-red-500 rounded p-3 text-red-300 text-sm">{error}</div>}
             <form onSubmit={handleLogin} className="space-y-4">
               <input
                 type="email"
@@ -192,12 +181,10 @@ export default function AuthScreen() {
           </div>
         )}
 
-        {/* Signup Screen */}
         {mode === 'signup' && (
           <div className="bg-gray-800 rounded-lg p-8 shadow-2xl space-y-4">
             <h2 className="text-2xl font-bold text-white text-center">הרשמה</h2>
-            {error && <div className="bg-red-500/20 border border-red-500 rounded p-3 text-red-300">{error}</div>}
-            
+            {error && <div className="bg-red-500/20 border border-red-500 rounded p-3 text-red-300 text-sm">{error}</div>}
             <form onSubmit={handleSignUp} className="space-y-4">
               <input
                 type="text"
