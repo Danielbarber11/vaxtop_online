@@ -34,7 +34,6 @@ export const useAuth = (): AuthContextType => {
   };
 
   const logout = () => {
-    localStorage.removeItem('vaxtopUser');
     setUser(null);
   };
 
