@@ -106,6 +106,25 @@ For issues and questions, please open a GitHub issue or contact the maintainers.
 ## Status
 Project is production-ready and deployed on Vercel.
 
+## Google OAuth Authentication
+
+This project now supports Google OAuth for seamless authentication.
+
+### Setup Google OAuth
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project
+3. Enable the Google+ API
+4. Create OAuth 2.0 credentials (Web Application)
+5. Add your redirect URI: `https://yourdomain.vercel.app/` and `http://localhost:5173/`
+6. Copy your Client ID
+7. Add `VITE_GOOGLE_CLIENT_ID` environment variable in Vercel with your Client ID
+8. Redeploy your application
+
+### Usage
+
+Users can click on the Google login button to sign in with their Google account. The authentication is powered by `@react-oauth/google` library and securely handles OAuth tokens.
+
 
 ## OAuth Login Features
 דמייה בעודדרוה: הפלטפורמה כעת דוכו מרי החדשה - Google, Apple ו Microsoft
