@@ -105,3 +105,7 @@ For issues and questions, please open a GitHub issue or contact the maintainers.
 
 ## Status
 Project is production-ready and deployed on Vercel.
+
+
+## OAuth Login Features
+דמייה בעודדרוה: הפלטפורמה כעת דוכו מרי החדשה - Google, Apple ו Microsoft
