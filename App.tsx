@@ -35,11 +35,11 @@ export const AppStateContext = React.createContext<{
 
 const App: React.FC = () => {
   return (
-    <EnhancedAuthContext.Provider value={useEnhancedAuth()}>
+    
       <AccessibilityProvider>
         <MainApp />
       </AccessibilityProvider>
-    </EnhancedAuthContext.Provider>
+    
   );
 };
 
