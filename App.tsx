@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { useEnhancedAuth } from './utils/EnhancedAuthContext';
 import { createSession, getCurrentSession, addLikedProduct, removeLikedProduct, addNotification } from './utils/sessionStorageManager';
 import { getPreferences, savePreferences, addFollowing, removeFollowing, isFollowing } from './utils/preferencesManager';
-import { AuthContext, useAuth } from './context/AuthContext';
+import { EnhancedAuthContext, useEnhancedAuthContext } from './utils/EnhancedAuthContext';
 import HomeScreen from './screens/HomeScreen';
 import SearchScreen from './screens/SearchScreen';
 import CreateProductScreen from './screens/CreateProductScreen';
@@ -35,11 +35,11 @@ export const AppStateContext = React.createContext<{
 
 const App: React.FC = () => {
   return (
-    <AuthContext.Provider value={useEnhancedAuth()}>
+    <EnhancedAuthContext.Provider value={useEnhancedAuth()}>
       <AccessibilityProvider>
         <MainApp />
       </AccessibilityProvider>
-    </AuthContext.Provider>
+    </EnhancedAuthContext.Provider>
   );
 };
 
