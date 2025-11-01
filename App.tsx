@@ -2,7 +2,6 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { useEnhancedAuth } from './utils/EnhancedAuthContext';
 import { createSession, getCurrentSession, addLikedProduct, removeLikedProduct, addNotification } from './utils/sessionStorageManager';
 import { getPreferences, savePreferences, addFollowing, removeFollowing, isFollowing } from './utils/preferencesManager';
-import { EnhancedAuthContext, useEnhancedAuthContext } from './utils/EnhancedAuthContext';
 import HomeScreen from './screens/HomeScreen';
 import SearchScreen from './screens/SearchScreen';
 import CreateProductScreen from './screens/CreateProductScreen';
