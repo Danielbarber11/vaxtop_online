@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useGoogleAuth } from '../context/GoogleAuthContext';
 import { MOCK_USERS } from '../data/mockData';
+import { GoogleLogin } from '@react-oauth/google';
 
 type AuthMode = 'welcome' | 'login' | 'signup';
 
@@ -12,19 +14,7 @@ export default function AuthScreen() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { signIn, signUp } = useAuth();
-
-  const handleGoogleLogin = async () => {
-    setLoading(true);
-    setError('');
-    try {
-      const testUser = MOCK_USERS[0];
-      await signIn(testUser.email, testUser.password);
-    } catch (err) {
-      setError('שגיאה בהתחברות דרך Google');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { handleGoogleSuccess, isLoading: googleLoading, error: googleError } = useGoogleAuth();
 
   const handleAppleLogin = async () => {
     setLoading(true);
@@ -87,38 +77,31 @@ export default function AuthScreen() {
               <h1 className="text-4xl font-bold text-white">vaxtop</h1>
               <p className="text-gray-400">ברוכים הבאים לפלטפורמה</p>
             </div>
-
-            {error && <div className="bg-red-500/20 border border-red-500 rounded p-3 text-red-300 text-sm">{error}</div>}
-
+            {(error || googleError) && <div className="bg-red-500/20 border border-red-500 rounded p-3 text-red-300 text-sm">{error || googleError}</div>}
             <div className="space-y-3">
-              <button
-                onClick={handleGoogleLogin}
-                disabled={loading}
-                className="w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition flex items-center justify-center gap-2"
-              >
-                <span>🔵</span>
-                התחברות דרך Google
-              </button>
-
+              <div className="w-full flex justify-center">
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={() => setError('שגיאה בהתחברות דרך Google. אנא נסה שוב.')}
+                />
+              </div>
               <button
                 onClick={handleAppleLogin}
-                disabled={loading}
+                disabled={loading || googleLoading}
                 className="w-full bg-black hover:bg-gray-900 disabled:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition flex items-center justify-center gap-2"
               >
-                <span>🍎</span>
+                <span>🎎</span>
                 התחברות דרך Apple
               </button>
-
               <button
                 onClick={handleMicrosoftLogin}
-                disabled={loading}
+                disabled={loading || googleLoading}
                 className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition flex items-center justify-center gap-2"
               >
                 <span>🔷</span>
                 התחברות דרך Microsoft
               </button>
             </div>
-
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-600"></div>
@@ -127,7 +110,6 @@ export default function AuthScreen() {
                 <span className="px-2 bg-gray-800 text-gray-400">או</span>
               </div>
             </div>
-
             <div className="space-y-2">
               <button
                 onClick={() => setMode('login')}
@@ -144,7 +126,6 @@ export default function AuthScreen() {
             </div>
           </div>
         )}
-
         {mode === 'login' && (
           <div className="bg-gray-800 rounded-lg p-8 shadow-2xl space-y-4">
             <h2 className="text-2xl font-bold text-white text-center">התחברות</h2>
@@ -152,7 +133,7 @@ export default function AuthScreen() {
             <form onSubmit={handleLogin} className="space-y-4">
               <input
                 type="email"
-                placeholder='דוא"ל'
+                placeholder='דוא"l'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full bg-gray-700 text-white placeholder-gray-400 rounded px-4 py-2"
@@ -180,7 +161,6 @@ export default function AuthScreen() {
             </button>
           </div>
         )}
-
         {mode === 'signup' && (
           <div className="bg-gray-800 rounded-lg p-8 shadow-2xl space-y-4">
             <h2 className="text-2xl font-bold text-white text-center">הרשמה</h2>
@@ -195,7 +175,7 @@ export default function AuthScreen() {
               />
               <input
                 type="email"
-                placeholder='דוא"ל'
+                placeholder='דוא"l'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full bg-gray-700 text-white placeholder-gray-400 rounded px-4 py-2"
