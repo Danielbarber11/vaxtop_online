@@ -165,7 +165,6 @@ const MainApp: React.FC = () => {
   };
 
   return (
-    <AuthProvider>
     <AppStateContext.Provider value={appStateValue}>
       <div className="bg-primary text-secondary h-dvh w-screen overflow-hidden flex flex-col md:flex-row font-sans">
         <SideNav activeScreen={activeScreen} setActiveScreen={navigate} promptForAuth={() => setShowAuthPrompt(true)} />
@@ -189,7 +188,6 @@ const MainApp: React.FC = () => {
         />
       )}
     </AppStateContext.Provider>
-          </AuthProvider>
   );
 };
 
