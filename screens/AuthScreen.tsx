@@ -152,7 +152,7 @@ export default function AuthScreen() {
             <form onSubmit={handleLogin} className="space-y-4">
               <input
                 type="email"
-                placeholder="דוא"ל"
+                placeholder='דוא"ל'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full bg-gray-700 text-white placeholder-gray-400 rounded px-4 py-2"
@@ -195,7 +195,7 @@ export default function AuthScreen() {
               />
               <input
                 type="email"
-                placeholder="דוא"ל"
+                placeholder='דוא"ל'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full bg-gray-700 text-white placeholder-gray-400 rounded px-4 py-2"
