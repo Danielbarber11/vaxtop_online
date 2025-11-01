@@ -1,4 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { useEnhancedAuth } from './utils/EnhancedAuthContext';
+import { createSession, getCurrentSession, addLikedProduct, removeLikedProduct, addNotification } from './utils/sessionStorageManager';
+import { getPreferences, savePreferences, addFollowing, removeFollowing, isFollowing } from './utils/preferencesManager';
 import { AuthContext, useAuth } from './context/AuthContext';
 import { AuthProvider } from './context/AuthContext';
 import HomeScreen from './screens/HomeScreen';
@@ -33,7 +36,7 @@ export const AppStateContext = React.createContext<{
 
 const App: React.FC = () => {
   return (
-    <AuthContext.Provider value={useAuth()}>
+    <AuthContext.Provider value={useEnhancedAuth()}>
       <AccessibilityProvider>
         <MainApp />
       </AccessibilityProvider>
@@ -42,7 +45,7 @@ const App: React.FC = () => {
 };
 
 const MainApp: React.FC = () => {
-  const { user, logout } = React.useContext(AuthContext);
+    const { user, logout, logoutAllDevices } = useEnhancedAuth();
   const [activeScreen, setActiveScreen] = useState('home');
   const [products, setProducts] = useState<Product[]>(MOCK_PRODUCTS);
   const [users, setUsers] = useState<User[]>(MOCK_USERS);
