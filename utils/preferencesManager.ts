@@ -1,5 +1,4 @@
-const limited = notifications.slice(-50);  const limited = notifications; // Store all permanently// Preferences Manager - שמירת העדפות המשתמש - לייקים, פעמונים, ויחסים
-
+const recentNotifications = notifications.slice(-50); const limited = notifications; // Store all permanent
 interface UserPreferences {
   userId: string;
   theme: 'light' | 'dark';
