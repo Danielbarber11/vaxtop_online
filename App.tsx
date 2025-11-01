@@ -3,7 +3,6 @@ import { useEnhancedAuth } from './utils/EnhancedAuthContext';
 import { createSession, getCurrentSession, addLikedProduct, removeLikedProduct, addNotification } from './utils/sessionStorageManager';
 import { getPreferences, savePreferences, addFollowing, removeFollowing, isFollowing } from './utils/preferencesManager';
 import { AuthContext, useAuth } from './context/AuthContext';
-import { AuthProvider } from './context/AuthContext';
 import HomeScreen from './screens/HomeScreen';
 import SearchScreen from './screens/SearchScreen';
 import CreateProductScreen from './screens/CreateProductScreen';
