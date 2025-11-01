@@ -5,6 +5,7 @@ export const MOCK_USERS: User[] = [
   { id: 'u2', name: 'חנות אופנה', email: 'fashion@store.com', isPartner: true, profilePicture: 'https://picsum.photos/id/1011/200', subscriptions: [], viewedNotifications: [], savedProducts: [], isBlocked: false, isPrivate: false },
   { id: 'u3', name: 'גאדג\'טים ועוד', email: 'gadgets@tech.com', isPartner: false, profilePicture: 'https://picsum.photos/id/1025/200', subscriptions: ['u1'], viewedNotifications: [], savedProducts: [], isBlocked: false, isPrivate: false },
   { id: 'u4', name: 'יופי וטיפוח', email: 'beauty@care.com', isPartner: false, subscriptions: [], viewedNotifications: [], savedProducts: [], isBlocked: false, isPrivate: false },
+  { id: 'u5', name: 'דניאל בר בר', email: 'danielbarber1246@gmail.com', isPartner: true, profilePicture: 'https://picsum.photos/id/1005/200', subscriptions: [], viewedNotifications: [], savedProducts: [], isBlocked: false, isPrivate: false }
 ];
 
 export const MOCK_PRODUCTS: Product[] = [
