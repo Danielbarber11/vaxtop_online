@@ -8,6 +8,7 @@ import { CheckboxSetting } from './AccessibilityScreen';
 import Modal from '../components/Modal';
 import { generateGradientForId } from '../utils/color';
 import TermsModal from '../components/TermsModal';
+import { getPreferences, savePreferences, getNotifications, getUnreadCount, markNotificationAsRead, addFollowing, removeFollowing, isFollowing } from '../utils/preferencesManager';
 
 type Tab = 'likes' | 'saved' | 'products' | 'notifications' | 'settings';
 
