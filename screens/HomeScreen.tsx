@@ -3,6 +3,7 @@ import React, { useContext, useState, useEffect, useRef, useMemo } from 'react';
 import ProductCard from '../components/ProductCard';
 import { AppStateContext } from '../App';
 import { User, Product } from '../types';
+import { getPreferences, savePreferences, addLikedProduct, removeLikedProduct, isProductLiked } from '../utils/preferencesManager';
 
 interface HomeScreenProps {
   setViewingProfile: (user: User) => void;
