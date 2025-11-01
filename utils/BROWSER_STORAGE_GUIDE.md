@@ -12,9 +12,7 @@ Manages user sessions across multiple devices with secure token generation.
 **Key Features:**
 - Creates unique device IDs
 - Generates secure session tokens
-- Tracks session expiration (30 days by default)
-- Maintains list of active sessions
-- Automatically clears expired sessions
+- Sessions persist forever - NO expiration (until manual deletion)- Maintains list of active sessions
 
 **Usage Example:**
 ```typescript
