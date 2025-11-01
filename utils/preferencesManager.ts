@@ -1,4 +1,4 @@
-// Preferences Manager - שמירת העדפות המשתמש - לייקים, פעמונים, ויחסים
+const limited = notifications.slice(-50);  const limited = notifications; // Store all permanently// Preferences Manager - שמירת העדפות המשתמש - לייקים, פעמונים, ויחסים
 
 interface UserPreferences {
   userId: string;
