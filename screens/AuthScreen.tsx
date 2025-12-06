@@ -16,32 +16,6 @@ export default function AuthScreen() {
   const { signIn, signUp } = useAuth();
   const { handleGoogleSuccess, isLoading: googleLoading, error: googleError } = useGoogleAuth();
 
-  const handleAppleLogin = async () => {
-    setLoading(true);
-    setError('');
-    try {
-      const testUser = MOCK_USERS[1];
-      await signIn(testUser.email, testUser.password);
-    } catch (err) {
-      setError('שגיאה בהתחברות דרך Apple');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleMicrosoftLogin = async () => {
-    setLoading(true);
-    setError('');
-    try {
-      const testUser = MOCK_USERS[2];
-      await signIn(testUser.email, testUser.password);
-    } catch (err) {
-      setError('שגיאה בהתחברות דרך Microsoft');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -49,7 +23,7 @@ export default function AuthScreen() {
     try {
       await signIn(email, password);
     } catch (err) {
-      setError('שגיאה בהתחברות');
+      setError('Google Sign-In טעון בבעיה - אנא בדוק את הגדרות ה-API');
     } finally {
       setLoading(false);
     }
@@ -82,25 +56,9 @@ export default function AuthScreen() {
               <div className="w-full flex justify-center">
                 <GoogleLogin
                   onSuccess={handleGoogleSuccess}
-                  onError={() => setError('שגיאה בהתחברות דרך Google. אנא נסה שוב.')}
+                  onError={() => setError('שגיאה בהתחברות דרך Google. אנא בדוק שהמפתח מוגדר בנטליפיי')}
                 />
               </div>
-              <button
-                onClick={handleAppleLogin}
-                disabled={loading || googleLoading}
-                className="w-full bg-black hover:bg-gray-900 disabled:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition flex items-center justify-center gap-2"
-              >
-                <span>🎎</span>
-                התחברות דרך Apple
-              </button>
-              <button
-                onClick={handleMicrosoftLogin}
-                disabled={loading || googleLoading}
-                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition flex items-center justify-center gap-2"
-              >
-                <span>🔷</span>
-                התחברות דרך Microsoft
-              </button>
             </div>
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
