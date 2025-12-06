@@ -6,6 +6,8 @@ interface GoogleAuthContextType {
   error: string | null;
   handleGoogleSuccess: (credentialResponse: any) => Promise<void>;
   generateGoogleUser: (userData: any) => User;
+  user: User | null;
+  setUser: (user: User | null) => void;
 }
 
 const GoogleAuthContext = createContext<GoogleAuthContextType>({
@@ -23,11 +25,14 @@ const GoogleAuthContext = createContext<GoogleAuthContextType>({
     savedProducts: [],
     isBlocked: false,
   }),
+  user: null,
+  setUser: () => {},
 });
 
 export const GoogleAuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   const generateGoogleUser = useCallback((userData: any): User => {
     const timestamp = Date.now().toString();
@@ -35,7 +40,7 @@ export const GoogleAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       id: `google_${timestamp}`,
       name: userData.name || '',
       email: userData.email || '',
-      password: 'google_auth', // OAuth users don't have passwords
+      password: 'google_auth',
       isPartner: false,
       subscriptions: [],
       viewedNotifications: [],
@@ -50,14 +55,12 @@ export const GoogleAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     setIsLoading(true);
     setError(null);
     try {
-      // Check if credentialResponse has a credential
       if (!credentialResponse.credential) {
-        setError('אנא בדוק שהגדרת את Google Client ID בדומיין שלך.');
+        setError('ערך הזיהוי של Google Client לא הוגדר כראוי.');
         setIsLoading(false);
         return;
       }
 
-      // Decode the JWT token
       const base64Url = credentialResponse.credential.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
       const jsonPayload = decodeURIComponent(
@@ -67,19 +70,22 @@ export const GoogleAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
           .join('')
       );
       const userData = JSON.parse(jsonPayload);
-      const user = generateGoogleUser(userData);
-      localStorage.setItem('vaxtopUser', JSON.stringify(user));
+      const newUser = generateGoogleUser(userData);
+      
+      localStorage.setItem('vaxtopUser', JSON.stringify(newUser));
+      setUser(newUser);
+      
       window.location.reload();
     } catch (err) {
       console.error('Google login error:', err);
       const errorMsg = err instanceof Error ? err.message : String(err);
-      
+
       if (errorMsg.includes('403') || errorMsg.includes('Invalid Client')) {
-        setError('שגיאה 403: בדוק שהגדרת את Google Client ID בצורה נכונה ב-Vercel');
+        setError('שגיאה 403: בדוק שהגדרת את Google Client ID בצורה נכונה ב-Netlify');
       } else if (errorMsg.includes('Network')) {
         setError('שגיאה בחיבור. בדוק את החיבור שלך לאינטרנט');
       } else {
-        setError('שגיאה בהתחברות עם Google. אנא נסה שוב. ' + errorMsg);
+        setError('שגיאה בהתחברות עם Google. אנא נסה שוב.');
       }
     } finally {
       setIsLoading(false);
@@ -87,8 +93,8 @@ export const GoogleAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   }, [generateGoogleUser]);
 
   const value = useMemo(
-    () => ({ isLoading, error, handleGoogleSuccess, generateGoogleUser }),
-    [isLoading, error, handleGoogleSuccess, generateGoogleUser]
+    () => ({ isLoading, error, handleGoogleSuccess, generateGoogleUser, user, setUser }),
+    [isLoading, error, handleGoogleSuccess, generateGoogleUser, user]
   );
 
   return (
